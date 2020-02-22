@@ -12,6 +12,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTableModule} from '@angular/material/table';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatInputModule} from '@angular/material/input';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -31,7 +34,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatIconModule,
     MatToolbarModule,
     MatTableModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatInputModule
     
   ],
   providers: [],

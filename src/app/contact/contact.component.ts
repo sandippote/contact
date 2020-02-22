@@ -1,25 +1,48 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { _contacts } from './contact_files';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+export interface _contactElement {
+  "E_mail_Address": string,
+      "Related_name": string,
+      "Home_Address_2": string,
+      "Anniversary": string,
+      "First_Name": string,
+      "Business_Address_2": string,
+      "Department": string,
+      "Display_Name": string,
+      "Home_State": string,
+      "Business_Country": string,
+      "Home_Street": string,
+      "Birthday": string,
+      "Home_Country": string,
+      "Pager": string,
+      "Categories": string,
+      "Home_City": string,
+      "E_mail_3_Address": string,
+      "Home_Fax": string,
+      "Gender": string,
+      "Notes": string,
+      "Country_Code": string,
+      "Job_Title": string,
+      "Business_Address": string,
+      "Web_Page_2": string,
+      "Mobile_Phone": string,
+      "Organization": string,
+      "Home_Phone": string,
+      "E-mail_2_Address": string,
+      "Last_Name": string,
+      "Nickname": string,
+      "Business_Fax": string,
+      "Home Postal Code": string,
+      "Business Phone": string,
+      "Business Postal Code": string,
+      "Web Page": string,
+      "Business City": string,
+      "Business State": string
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+const ELEMENT_DATA: _contactElement[] = _contacts;
 
 @Component({
   selector: 'app-contact',
@@ -28,7 +51,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ContactComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  contact: any = [];
+
+  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = [
+    "Name", "E-Mail", "Phone No."
+  ];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
 
   applyFilter(event: Event) {
@@ -36,7 +64,9 @@ export class ContactComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  constructor() { }
+  constructor() {
+    this.contact = _contacts;
+  }
 
   ngOnInit(): void {
   }
