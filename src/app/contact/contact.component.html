@@ -13,39 +13,44 @@
                 <input class="search" type="text" placeholder="Search" (keyup)="search$.next($event.target.value)">
             </section>
         </div>
-        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" *ngIf="userDetails.length === 0">
-            No Data Availbale
+        <div fxFlex="100" fxLayout="row" fxLayoutAlign="center center" *ngIf="error">
+            Server error
         </div>
         <div class="body" fxFlex="100" fxLayout="row wrap" fxLayoutAlign="center center" *ngIf="userDetails.length > 0">
-            <p fxFlex="55" fxLayout="row" fxLayoutAlign="start start">
-                <strong>Total Results: {{ totalCount }}</strong>
-            </p>
-            <mat-card fxFlex="55" class="details" fxLayoutGap="2px" *ngFor="let userDetail of userDetails; index as i">
-                <mat-card-header>
-                    <div mat-card-avatar [ngStyle]="{'background-image': 'url('+userDetail.avatar_url+')'}"></div>
-                    <mat-card-title>{{ userDetail.login }}</mat-card-title>
-                    <mat-card-subtitle>Profile Url: {{ userDetail.html_url }}</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <div fxLayout="row" fxLayoutAlign="end end">
-                        <button mat-stroked-button (click)="getDetail(userDetail.login, i)"> Details </button>
-                    </div>
-
-                    <div *ngIf="repositoryInfo.length > 0 && i === curIndex">
-                        <table fxFlex="100">
-                            <tr *ngFor="let repoInfo of repositoryInfo; index as j">
-                                <th> {{repoInfo.name}}</th>
-                                <td> {{repoInfo.language}}</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                </mat-card-content>
-            </mat-card>
-            <div fxFlex="55" fxLayout="row" fxLayoutAlign="end end">
-                <mat-paginator [length]="totalCount" [pageSize]="5" (page)="pageInfo($event)">
-                </mat-paginator>
-            </div>
+            <ng-template [ngIf]="userDetails.length === 0">
+                No Data Availbale
+            </ng-template>
+            <ng-template [ngIf]="userDetails.length > 0">
+                <p fxFlex="55" fxLayout="row" fxLayoutAlign="start start">
+                    <strong>Total Results: {{ totalCount }}</strong>
+                </p>
+                <mat-card fxFlex="55" class="details" fxLayoutGap="2px" *ngFor="let userDetail of userDetails; index as i">
+                    <mat-card-header>
+                        <div mat-card-avatar [ngStyle]="{'background-image': 'url('+userDetail.avatar_url+')'}"></div>
+                        <mat-card-title>{{ userDetail.login }}</mat-card-title>
+                        <mat-card-subtitle>Profile Url: {{ userDetail.html_url }}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div fxLayout="row" fxLayoutAlign="end end">
+                            <button mat-stroked-button (click)="getDetail(userDetail.login, i)"> Details </button>
+                        </div>
+    
+                        <div *ngIf="repositoryInfo.length > 0 && i === curIndex">
+                            <table fxFlex="100">
+                                <tr *ngFor="let repoInfo of repositoryInfo; index as j">
+                                    <th> {{repoInfo.name}}</th>
+                                    <td> {{repoInfo.language}}</td>
+                                </tr>
+                            </table>
+                        </div>
+    
+                    </mat-card-content>
+                </mat-card>
+                <div fxFlex="55" fxLayout="row" fxLayoutAlign="end end">
+                    <mat-paginator [length]="totalCount" [pageSize]="5" (page)="pageInfo($event)">
+                    </mat-paginator>
+                </div>
+            </ng-template>
         </div>
     </div>
 </div>

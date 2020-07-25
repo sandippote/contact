@@ -20,6 +20,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   totalCount: number = 0;
   curIndex: number;
   searhName: any;
+  error = false;
 
   constructor(
     private _service: UserDetailService
@@ -44,7 +45,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     this._service.getDetails(this.searhName, pageIndex, pageSize).pipe(takeUntil(this.unsubscribe)).subscribe((res) => {
       this.userDetails = res.items;
       this.totalCount = res.total_count;
-    });
+    },
+      (error) => {
+        this.error = true;
+        console.error(error);
+      },
+      () => { }
+    );
   }
 
   /**
@@ -56,7 +63,13 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.curIndex = index;
     this._service.userInfo(username).pipe(takeUntil(this.unsubscribe)).subscribe((val) => {
       this.repositoryInfo = val;
-    });
+    },
+      (error) => {
+        this.error = true; 
+        console.error(error); 
+      },
+      () => { }
+    );
   }
 
   /**
