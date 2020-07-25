@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, mergeMap, delay, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { UserDetailService } from './UserDetail.service';
 import { userdetails } from './user-detail.modal';
 
@@ -30,9 +30,9 @@ export class ContactComponent implements OnInit, OnDestroy {
       debounceTime(500),
       distinctUntilChanged()).
       subscribe((searchVal) => {
-      this.searhName = searchVal;
-      this.getUsers(1, 5);
-    });
+        this.searhName = searchVal;
+        this.getUsers(1, 5);
+      });
   }
 
   /**

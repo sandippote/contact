@@ -31,6 +31,6 @@ export class UserDetailService {
      * @param name 
      */
     userInfo(name: string): Observable<any> {
-        return this._http.get<Response<userdetails[]>>('https://api.github.com/users/' + name + '/repos');
+        return this._http.get<Response<any>>('https://api.github.com/users/' + name + '/repos');
     }
 }
