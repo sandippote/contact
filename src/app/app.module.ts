@@ -32,7 +32,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     HttpClientModule,
 
-    RouterModule.forRoot([contactRoute]),
+    RouterModule.forRoot(contactRoute),
     FlexLayoutModule,
     MatCardModule,
     MatIconModule,
