@@ -15,8 +15,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatInputModule} from '@angular/material/input';
+import {MatPaginatorModule} from '@angular/material/paginator';
+
 
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -27,6 +30,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
 
     RouterModule.forRoot([contactRoute]),
     FlexLayoutModule,
@@ -37,7 +41,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatFormFieldModule,
     MatButtonModule,
     MatTooltipModule,
-    MatInputModule
+    MatInputModule,
+    MatPaginatorModule
     
   ],
   providers: [],

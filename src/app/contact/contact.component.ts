@@ -1,74 +1,111 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { _contacts } from './contact_files';
-
-export interface _contactElement {
-  "E_mail_Address": string,
-      "Related_name": string,
-      "Home_Address_2": string,
-      "Anniversary": string,
-      "First_Name": string,
-      "Business_Address_2": string,
-      "Department": string,
-      "Display_Name": string,
-      "Home_State": string,
-      "Business_Country": string,
-      "Home_Street": string,
-      "Birthday": string,
-      "Home_Country": string,
-      "Pager": string,
-      "Categories": string,
-      "Home_City": string,
-      "E_mail_3_Address": string,
-      "Home_Fax": string,
-      "Gender": string,
-      "Notes": string,
-      "Country_Code": string,
-      "Job_Title": string,
-      "Business_Address": string,
-      "Web_Page_2": string,
-      "Mobile_Phone": string,
-      "Organization": string,
-      "Home_Phone": string,
-      "E-mail_2_Address": string,
-      "Last_Name": string,
-      "Nickname": string,
-      "Business_Fax": string,
-      "Home Postal Code": string,
-      "Business Phone": string,
-      "Business Postal Code": string,
-      "Web Page": string,
-      "Business City": string,
-      "Business State": string
-}
-
-const ELEMENT_DATA: _contactElement[] = _contacts;
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, mergeMap, delay, takeUntil } from 'rxjs/operators';
+import { UserDetailService } from './UserDetail.service';
+import { userdetails } from './user-detail.modal';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css']
+  styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, OnDestroy {
 
-  contact: any = [];
+  search$ = new Subject<KeyboardEvent>();
+  unsubscribe = new Subject();
 
-  // displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  displayedColumns: string[] = [
-    "Name", "E-Mail", "Phone No."
-  ];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  userDetails: userdetails[] = [];
+  repositoryInfo = [];
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  totalCount: number = 0;
+  curIndex: number;
+  searhName: any;
 
-  constructor() {
-    this.contact = _contacts;
-  }
+  constructor(
+    private _service: UserDetailService
+  ) { }
 
   ngOnInit(): void {
+    this.search$.pipe(
+      debounceTime(500),
+      distinctUntilChanged()).
+      subscribe((searchVal) => {
+      this.searhName = searchVal;
+      this.getUsers(1, 5);
+    });
+  }
+
+  /**
+   * 
+   * @param pageIndex 
+   * @param pageSize 
+   */
+  getUsers(pageIndex: number, pageSize: number): void {
+    this._service.getDetails(this.searhName, pageIndex, pageSize).pipe(takeUntil(this.unsubscribe)).subscribe((res) => {
+      this.userDetails = res.items;
+      this.totalCount = res.total_count;
+    });
+  }
+
+  /**
+   * Purpose: get users details
+   * @param username 
+   * @package index
+   */
+  getDetail(username: string, index: number): void {
+    this.curIndex = index;
+    this._service.userInfo(username).pipe(takeUntil(this.unsubscribe)).subscribe((val) => {
+      this.repositoryInfo = val;
+    });
+  }
+
+  /**
+   * 
+   * @param type 
+   */
+  compare(type: string) {
+    return function sortAccording(a, b) {
+      let nameA = a.login.toUpperCase();
+      let nameB = b.login.toUpperCase();
+      let _compare = 0;
+      if (nameA < nameB) {
+        _compare = -1;
+      }
+      if (nameA > nameB) {
+        _compare = 1;
+      }
+      return (
+        type === 'az' ? _compare : (_compare * -1)
+      );
+    }
+  }
+
+  /**
+   * 
+   * @param sortType 
+   */
+  sortArray(sortType: string): void {
+    if (sortType === 'asc') {
+      this.userDetails = this.userDetails.sort((a, b) => { return a.score - b.score; });
+    } else if (sortType === 'desc') {
+      this.userDetails = this.userDetails.sort((a, b) => { return b.score - a.score; });
+    } else {
+      this.userDetails = this.userDetails.sort(this.compare(sortType));
+    }
+    this.repositoryInfo = [];
+  }
+
+  /**
+   * 
+   * @param event 
+   */
+  pageInfo(event): void {
+    this.getUsers((event.pageIndex + 1), event.pageSize);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
 }
